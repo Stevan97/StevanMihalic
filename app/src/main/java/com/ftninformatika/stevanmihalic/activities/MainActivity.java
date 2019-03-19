@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,24 +13,32 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ftninformatika.stevanmihalic.R;
 import com.ftninformatika.stevanmihalic.adapters.DrawerAdapter;
 import com.ftninformatika.stevanmihalic.db.DatabaseHelper;
 import com.ftninformatika.stevanmihalic.db.model.Grupa;
+import com.ftninformatika.stevanmihalic.db.model.Task;
 import com.ftninformatika.stevanmihalic.dialogs.AboutDialog;
 import com.ftninformatika.stevanmihalic.model.NavigationItems;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private int position = 1;
     private DatabaseHelper databaseHelper = null;
     private Grupa grupa = null;
+    private Task task = null;
 
     private ListView listViewMain = null;
     private List<Grupa> grupaList = null;
@@ -72,16 +83,128 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void prikaziListuGrupa() {
+        listViewMain = findViewById(R.id.list_view_MAIN);
+        try {
+            grupaList = getDatabaseHelper().getGrupa().queryForAll();
+            grupaArrayAdapter = new ArrayAdapter<>(this, R.layout.list_array_adapter, R.id.list_array_text_view, grupaList);
+            listViewMain.setAdapter(grupaArrayAdapter);
+            listViewMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                    grupa = (Grupa) listViewMain.getItemAtPosition(position);
+
+                    Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                    intent.putExtra("id", grupa.getId());
+                    startActivity(intent);
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void dodajGrupu() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(R.layout.dodaj_grupu);
+        dialog.show();
+
+        final EditText editNaziv = dialog.findViewById(R.id.dodaj_grupu_naziv);
+        final EditText editVremeKreiranja = dialog.findViewById(R.id.dodaj_grupu_vreme_kreiranja);
+        final EditText editOznaka1 = dialog.findViewById(R.id.dodaj_grupu_oznaka1);
+        final EditText editOznaka2 = dialog.findViewById(R.id.dodaj_grupu_oznaka2);
+        final EditText editTask = dialog.findViewById(R.id.dodaj_grupu_TASK);
+
+        Button confirm = dialog.findViewById(R.id.dodaj_grupu_button_confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (editNaziv.getText().toString().isEmpty()) {
+                    editNaziv.setError("Polje Naziv ne sme biti prazno!");
+                    return;
+                }
+                if (editVremeKreiranja.getText().toString().isEmpty()) {
+                    editVremeKreiranja.setError("Polje Vreme Kreiranja ne sme biti prazno!");
+                    return;
+                }
+                if (editTask.getText().toString().isEmpty()) {
+                    editTask.setError("TODOZADATAK ne sme biti prazan");
+                    return;
+                }
+
+                String naziv = editNaziv.getText().toString();
+                String vremeKreiranja = editVremeKreiranja.getText().toString();
+                String oznaka1 = editOznaka1.getText().toString();
+                String oznaka2 = editOznaka2.getText().toString();
+                String todoZadatak = editTask.getText().toString();
+
+                grupa = new Grupa();
+                grupa.setNaziv(naziv);
+                grupa.setVremeKreiranjaGrupe(vremeKreiranja);
+                grupa.setOznake(oznaka1);
+                grupa.setOznake(oznaka2);
+
+                task = new Task();
+                task.setNaziv(todoZadatak);
+
+                try {
+                    getDatabaseHelper().getGrupa().create(grupa);
+                    getDatabaseHelper().getToDoZadatak().create(task);
+                    refresh();
+                    dialog.dismiss();
+
+                    message1 = new SpannableString("Uspesno kreirana Grupa:  ");
+                    message2 = new SpannableString(grupa.getNaziv());
+
+                    message1.setSpan(new StyleSpan(Typeface.BOLD), 0, message1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    message2.setSpan(new ForegroundColorSpan(Color.RED), 0, message2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    if (showMessage) {
+                        Toast toast = Toast.makeText(MainActivity.this, "", Toast.LENGTH_LONG);
+                        View toastView = toast.getView();
+
+                        TextView toastText = toastView.findViewById(android.R.id.message);
+                        toastText.setText(message1);
+                        toastText.append(message2);
+                        toast.show();
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+
+        Button cancel = dialog.findViewById(R.id.dodaj_grupu_button_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
     }
 
     private void refresh() {
-
+        listViewMain = findViewById(R.id.list_view_MAIN);
+        if (listViewMain != null) {
+            grupaArrayAdapter = (ArrayAdapter<Grupa>) listViewMain.getAdapter();
+            if (grupaArrayAdapter != null) {
+                try {
+                    grupaList = getDatabaseHelper().getGrupa().queryForAll();
+                    grupaArrayAdapter.clear();
+                    grupaArrayAdapter.addAll(grupaList);
+                    grupaArrayAdapter.notifyDataSetChanged();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
+
 
 
 

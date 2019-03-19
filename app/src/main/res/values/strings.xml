@@ -7,4 +7,10 @@
     <string name="dialog_about_yes">Confirm</string>
     <string name="dialog_about_no">Cancel</string>
     <string name="dodaj_grupu">Dodaj Grupu</string>
+    <string name="naziv_grupe">Naziv Grupe</string>
+    <string name="vreme_kreiranja_grupe">Vreme Kreiranja Grupe</string>
+    <string name="oznak_grupe_tag"><![CDATA[Oznak Grupe < TAG >]]></string>
+    <string name="potvrdi">Potvrdi</string>
+    <string name="odustani">Odustani</string>
+    <string name="todozadatak">ToDOZADATAK</string>
 </resources>

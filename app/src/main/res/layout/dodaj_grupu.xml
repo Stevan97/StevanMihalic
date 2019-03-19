@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/colorDark"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/dodaj_grupu_naziv"
+        android:hint="@string/naziv_grupe"
+        android:textColorHint="@color/colorRED"
+        android:textColor="@color/colorRED"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/dodaj_grupu_vreme_kreiranja"
+        android:hint="@string/vreme_kreiranja_grupe"
+        android:textColorHint="@color/colorRED"
+        android:inputType="date"
+        android:textColor="@color/colorRED"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/dodaj_grupu_oznaka1"
+        android:hint="@string/oznak_grupe_tag"
+        android:textColorHint="@color/colorRED"
+        android:textColor="@color/colorRED"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <EditText
+        android:id="@+id/dodaj_grupu_oznaka2"
+        android:hint="@string/oznak_grupe_tag"
+        android:textColorHint="@color/colorRED"
+        android:textColor="@color/colorRED"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/dodaj_grupu_TASK"
+        android:hint="@string/todozadatak"
+        android:textColorHint="@color/colorRED"
+        android:textColor="@color/colorRED"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/dodaj_grupu_button_confirm"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:text="@string/potvrdi"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/dodaj_grupu_button_cancel"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:text="@string/odustani"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

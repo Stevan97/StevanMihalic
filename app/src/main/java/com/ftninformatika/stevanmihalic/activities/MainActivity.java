@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         prikaziListuGrupa();
 
 
-
     }
 
     private void prikaziListuGrupa() {
@@ -183,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void refresh() {
         listViewMain = findViewById(R.id.list_view_MAIN);
         if (listViewMain != null) {
@@ -198,8 +196,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
 
 
     private void consultPreferences() {

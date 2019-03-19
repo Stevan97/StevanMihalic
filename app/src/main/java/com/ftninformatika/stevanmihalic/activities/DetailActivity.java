@@ -160,8 +160,16 @@ public class DetailActivity extends AppCompatActivity {
             taskList = new ArrayList<>(taskForeignCollection);
             taskAdapter = new TaskAdapter(this, taskList);
             listViewDetail.setAdapter(taskAdapter);
+            listViewDetail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    task = (Task) listViewDetail.getItemAtPosition(position);
 
-
+                    Intent intent = new Intent(DetailActivity.this, TaskActivity.class);
+                    intent.putExtra("id", task.getId());
+                    startActivity(intent);
+                }
+            });
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -339,7 +347,7 @@ public class DetailActivity extends AppCompatActivity {
 
                     startActivity(getIntent());
                     finish();
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
 
                     message1 = new SpannableString("Uspesno izmena Grupe | Novo ime Grupe: ");
                     message2 = new SpannableString(grupa.getNaziv());

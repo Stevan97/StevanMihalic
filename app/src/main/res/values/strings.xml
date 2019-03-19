@@ -21,4 +21,5 @@
     <string name="prioritet">PRIORITET:</string>
     <string name="status">STATUS:</string>
     <string name="naziv_zadatka">Naziv Zadatka</string>
+    <string name="novo_vreme_kreiranja">Novo vreme Kreiranja</string>
 </resources>

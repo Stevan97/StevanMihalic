@@ -8,19 +8,19 @@
     <TextView
         android:id="@+id/task_adapter_naziv"
         android:layout_width="match_parent"
-        android:textSize="15sp"
+        android:textSize="25sp"
         android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/task_adapter_vreme_kreiranja"
         android:layout_width="match_parent"
-        android:textSize="15sp"
+        android:textSize="25sp"
         android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/task_adapter_vreme_zavrsetka"
         android:layout_width="match_parent"
-        android:textSize="15sp"
+        android:textSize="25sp"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

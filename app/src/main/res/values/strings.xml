@@ -13,4 +13,6 @@
     <string name="potvrdi">Potvrdi</string>
     <string name="odustani">Odustani</string>
     <string name="todozadatak">ToDOZADATAK</string>
+    <string name="lista_tagova">Lista Tagova:</string>
+    <string name="lista_zadataka">Lista Zadataka:</string>
 </resources>

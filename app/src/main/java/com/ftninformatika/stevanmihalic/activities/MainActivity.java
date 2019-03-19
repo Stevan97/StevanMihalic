@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
         navigationDrawer();
 
+        prikaziListuGrupa();
+
 
 
     }
@@ -114,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         final EditText editVremeKreiranja = dialog.findViewById(R.id.dodaj_grupu_vreme_kreiranja);
         final EditText editOznaka1 = dialog.findViewById(R.id.dodaj_grupu_oznaka1);
         final EditText editOznaka2 = dialog.findViewById(R.id.dodaj_grupu_oznaka2);
-        final EditText editTask = dialog.findViewById(R.id.dodaj_grupu_TASK);
 
         Button confirm = dialog.findViewById(R.id.dodaj_grupu_button_confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
@@ -128,16 +129,11 @@ public class MainActivity extends AppCompatActivity {
                     editVremeKreiranja.setError("Polje Vreme Kreiranja ne sme biti prazno!");
                     return;
                 }
-                if (editTask.getText().toString().isEmpty()) {
-                    editTask.setError("TODOZADATAK ne sme biti prazan");
-                    return;
-                }
 
                 String naziv = editNaziv.getText().toString();
                 String vremeKreiranja = editVremeKreiranja.getText().toString();
                 String oznaka1 = editOznaka1.getText().toString();
                 String oznaka2 = editOznaka2.getText().toString();
-                String todoZadatak = editTask.getText().toString();
 
                 grupa = new Grupa();
                 grupa.setNaziv(naziv);
@@ -145,12 +141,9 @@ public class MainActivity extends AppCompatActivity {
                 grupa.setOznake(oznaka1);
                 grupa.setOznake(oznaka2);
 
-                task = new Task();
-                task.setNaziv(todoZadatak);
 
                 try {
                     getDatabaseHelper().getGrupa().create(grupa);
-                    getDatabaseHelper().getToDoZadatak().create(task);
                     refresh();
                     dialog.dismiss();
 

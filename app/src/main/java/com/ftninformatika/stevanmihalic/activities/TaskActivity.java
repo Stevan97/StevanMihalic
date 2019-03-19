@@ -1,7 +1,10 @@
 package com.ftninformatika.stevanmihalic.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
@@ -27,6 +30,7 @@ import android.widget.Toast;
 
 import com.ftninformatika.stevanmihalic.R;
 import com.ftninformatika.stevanmihalic.adapters.DrawerAdapter;
+import com.ftninformatika.stevanmihalic.adapters.MainAdapter;
 import com.ftninformatika.stevanmihalic.adapters.TaskAdapter;
 import com.ftninformatika.stevanmihalic.db.DatabaseHelper;
 import com.ftninformatika.stevanmihalic.db.model.Grupa;
@@ -76,7 +80,7 @@ public class TaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
 
-        //navigationDrawer();
+        navigationDrawer();
 
         prikaziDetaljeTaska();
 
@@ -136,6 +140,72 @@ public class TaskActivity extends AppCompatActivity {
         status.append(message2);
 
     }
+
+    private void izbrisiTask() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.izbrisi_task);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        intentPosition = getIntent();
+        idPosition = intentPosition.getExtras().getInt("id");
+
+        try {
+            task = getDatabaseHelper().getToDoZadatak().queryForId(idPosition);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        TextView text = dialog.findViewById(R.id.izbrisi_task_text);
+        message1 = new SpannableString("Da li ste sigurni da zelite da izbrisete Zadatak pod nazivom: ");
+        message2 = new SpannableString(task.getNaziv());
+        spannableStyle();
+        text.setText(message1);
+        text.append(message2);
+
+        confirm = dialog.findViewById(R.id.izbrisi_task_button_confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+
+                try {
+
+                    getDatabaseHelper().getToDoZadatak().delete(task);
+
+
+                    onBackPressed();
+
+                    message1 = new SpannableString("Uspesno izbrisan Zadatak sa nazivom:  ");
+                    message2 = new SpannableString(task.getNaziv());
+                    spannableStyle();
+
+                    if (showMessage) {
+                        toast = Toast.makeText(TaskActivity.this, "", Toast.LENGTH_LONG);
+                        toastView = toast.getView();
+
+                        textToast = toastView.findViewById(android.R.id.message);
+                        textToast.setText(message1);
+                        textToast.append(message2);
+                        toast.show();
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        cancel = dialog.findViewById(R.id.izbrisi_task_button_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
 
     private void spannableStyle() {
         message1.setSpan(new StyleSpan(Typeface.BOLD), 0, message1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -208,7 +278,8 @@ public class TaskActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (position == 0) {
-                onBackPressed();
+                Intent intent = new Intent(TaskActivity.this, MainActivity.class);
+                startActivity(intent);
                 overridePendingTransition(0, 0);
             } else if (position == 1) {
                 Intent intent = new Intent(TaskActivity.this, SettingsActivity.class);
@@ -234,7 +305,7 @@ public class TaskActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_task_delete:
-
+                izbrisiTask();
                 break;
 
         }

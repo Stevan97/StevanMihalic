@@ -147,7 +147,7 @@ public class DetailActivity extends AppCompatActivity {
         try {
             oznakeForeignCollection = getDatabaseHelper().getGrupa().queryForId(idPosition).getOznake();
             oznakeList = new ArrayList<>(oznakeForeignCollection);
-            arrayAdapterOznake = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, oznakeList);
+            arrayAdapterOznake = new ArrayAdapter<>(this, R.layout.list_array_adapter, R.id.list_array_text_view, oznakeList);
             listView.setAdapter(arrayAdapterOznake);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -465,6 +465,7 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        osveziTaskove();
         consultPreferences();
         super.onResume();
     }

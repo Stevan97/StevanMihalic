@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -53,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -158,6 +160,8 @@ public class DetailActivity extends AppCompatActivity {
             taskList = new ArrayList<>(taskForeignCollection);
             taskAdapter = new TaskAdapter(this, taskList);
             listViewDetail.setAdapter(taskAdapter);
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -207,7 +211,6 @@ public class DetailActivity extends AppCompatActivity {
 
         final EditText editNaziv = dialog.findViewById(R.id.add_task_naziv);
         final EditText editOpis = dialog.findViewById(R.id.add_task_opis);
-        final EditText editKreirano = dialog.findViewById(R.id.add_task_vreme_kreiranja);
         final EditText editZavrseno = dialog.findViewById(R.id.add_task_vreme_zavrsetka);
 
         confirm = dialog.findViewById(R.id.add_task_button_confirm);
@@ -222,11 +225,16 @@ public class DetailActivity extends AppCompatActivity {
                     editOpis.setError("Polje Opis ne sme biti prazno");
                     return;
                 }
+                if (editZavrseno.getText().toString().isEmpty() || !isValidDate(editZavrseno.getText().toString())) {
+                    editZavrseno.setError("Format: dd.MM.yyyy HH:mm:ss");
+                    return;
+                }
 
                 String naziv = editNaziv.getText().toString();
                 String opis = editOpis.getText().toString();
-                String kreirano = editKreirano.getText().toString();
                 String zavrseno = editZavrseno.getText().toString();
+
+                String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
 
 
                 try {
@@ -238,14 +246,16 @@ public class DetailActivity extends AppCompatActivity {
                     task = new Task();
                     task.setNaziv(naziv);
                     task.setOpis(opis);
-                    task.setVremeKreiranja(kreirano);
+                    task.setVremeKreiranja(date);
                     task.setVremeZavrsetka(zavrseno);
                     task.setTipPrioriteta(prioritet);
                     task.setStatus(status);
+                    task.setGrupa(grupa);
 
                     getDatabaseHelper().getToDoZadatak().create(task);
                     dialog.dismiss();
 
+                    osveziTaskove();
                     message1 = new SpannableString("Uspesno kreiran Zadatak sa nazivom: ");
                     message2 = new SpannableString(task.getNaziv());
                     spannableStyle();
@@ -275,6 +285,96 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void osveziTaskove() {
+        listViewDetail = findViewById(R.id.list_view_DETAIL);
+        if (listViewDetail != null) {
+            taskAdapter = (TaskAdapter) listViewDetail.getAdapter();
+            if (taskAdapter != null) {
+                intentPosition = getIntent();
+                idPosition = intentPosition.getExtras().getInt("id");
+                try {
+                    taskForeignCollection = getDatabaseHelper().getGrupa().queryForId(idPosition).getToDoZadaci();
+                    taskList = new ArrayList<>(taskForeignCollection);
+                    taskAdapter.refreshList(taskList);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void izmenaGrupe() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(R.layout.izmena_grupe);
+        dialog.show();
+
+        final EditText editNaziv = dialog.findViewById(R.id.izmena_grupe_naziv);
+
+        Button confirm = dialog.findViewById(R.id.izmena_grupe_button_confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (editNaziv.getText().toString().isEmpty()) {
+                    editNaziv.setError("Polje Naziv ne sme biti prazno!");
+                    return;
+                }
+
+                String naziv = editNaziv.getText().toString();
+
+                try {
+                    intentPosition = getIntent();
+                    idPosition = intentPosition.getExtras().getInt("id");
+                    grupa = getDatabaseHelper().getGrupa().queryForId(idPosition);
+
+                    String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
+
+                    grupa.setNaziv(naziv);
+                    grupa.setVremeKreiranjaGrupe(date);
+
+
+                    getDatabaseHelper().getGrupa().update(grupa);
+                    dialog.dismiss();
+
+                    startActivity(getIntent());
+                    finish();
+                    overridePendingTransition(0,0);
+
+                    message1 = new SpannableString("Uspesno izmena Grupe | Novo ime Grupe: ");
+                    message2 = new SpannableString(grupa.getNaziv());
+
+                    message1.setSpan(new StyleSpan(Typeface.BOLD), 0, message1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    message2.setSpan(new ForegroundColorSpan(Color.RED), 0, message2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    if (showMessage) {
+                        Toast toast = Toast.makeText(DetailActivity.this, "", Toast.LENGTH_LONG);
+                        View toastView = toast.getView();
+
+                        TextView toastText = toastView.findViewById(android.R.id.message);
+                        toastText.setText(message1);
+                        toastText.append(message2);
+                        toast.show();
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+
+        Button cancel = dialog.findViewById(R.id.izmena_grupe_button_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+    }
+
 
     private void izbrisiGrupu() {
         final Dialog dialog = new Dialog(this);
@@ -447,7 +547,7 @@ public class DetailActivity extends AppCompatActivity {
                 addTask();
                 break;
             case R.id.menu_detail_update:
-
+                izmenaGrupe();
                 break;
         }
 
@@ -458,7 +558,7 @@ public class DetailActivity extends AppCompatActivity {
      * Proveravamo datum
      */
     public static boolean isValidDate(String inDate) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         dateFormat.setLenient(false);
         try {
             dateFormat.parse(inDate.trim());

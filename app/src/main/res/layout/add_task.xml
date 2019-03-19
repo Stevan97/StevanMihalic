@@ -2,7 +2,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/colorDark"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -22,20 +21,11 @@
         android:textColorHint="@color/colorRED"
         android:textColor="@color/colorRED"/>
 
-    <EditText
-        android:id="@+id/add_task_vreme_kreiranja"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:hint="@string/vreme_kreiranja_zadatka"
-        android:textColorHint="@color/colorRED"
-        android:textColor="@color/colorRED"/>
 
     <EditText
         android:id="@+id/add_task_vreme_zavrsetka"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="date"
         android:hint="@string/vreme_zavrsetka_zadatka"
         android:textColorHint="@color/colorRED"
         android:textColor="@color/colorRED"/>
@@ -48,6 +38,8 @@
 
     <Spinner
         android:id="@+id/add_task_spinner_prioritet"
+        android:outlineAmbientShadowColor="@color/colorRED"
+        android:outlineSpotShadowColor="@color/colorRED"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColorHint="@color/colorRED"

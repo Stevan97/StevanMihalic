@@ -7,16 +7,8 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/dodaj_grupu_naziv"
+        android:id="@+id/izmena_grupe_naziv"
         android:hint="@string/naziv_grupe"
-        android:textColorHint="@color/colorRED"
-        android:textColor="@color/colorRED"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/dodaj_grupu_oznaka1"
-        android:hint="@string/oznak_grupe_tag"
         android:textColorHint="@color/colorRED"
         android:textColor="@color/colorRED"
         android:layout_width="match_parent"
@@ -30,7 +22,7 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/dodaj_grupu_button_confirm"
+            android:id="@+id/izmena_grupe_button_confirm"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:text="@string/potvrdi"
             android:textSize="20sp"
@@ -38,7 +30,7 @@
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/dodaj_grupu_button_cancel"
+            android:id="@+id/izmena_grupe_button_cancel"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:text="@string/odustani"
             android:textSize="20sp"

@@ -44,7 +44,9 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -115,9 +117,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
 
         final EditText editNaziv = dialog.findViewById(R.id.dodaj_grupu_naziv);
-        final EditText editVremeKreiranja = dialog.findViewById(R.id.dodaj_grupu_vreme_kreiranja);
         final EditText editOznaka1 = dialog.findViewById(R.id.dodaj_grupu_oznaka1);
-        final EditText editOznaka2 = dialog.findViewById(R.id.dodaj_grupu_oznaka2);
 
         Button confirm = dialog.findViewById(R.id.dodaj_grupu_button_confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
@@ -127,23 +127,19 @@ public class MainActivity extends AppCompatActivity {
                     editNaziv.setError("Polje Naziv ne sme biti prazno!");
                     return;
                 }
-                if (editVremeKreiranja.getText().toString().isEmpty()) {
-                    editVremeKreiranja.setError("Polje Vreme Kreiranja ne sme biti prazno!");
-                    return;
-                }
 
                 String naziv = editNaziv.getText().toString();
-                String vremeKreiranja = editVremeKreiranja.getText().toString();
                 String oznaka1 = editOznaka1.getText().toString();
-                String oznaka2 = editOznaka2.getText().toString();
+
+                String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
 
                 grupa = new Grupa();
                 grupa.setNaziv(naziv);
-                grupa.setVremeKreiranjaGrupe(vremeKreiranja);
+                grupa.setVremeKreiranjaGrupe(date);
 
                 Oznake oznake = new Oznake();
                 oznake.setOznaka(oznaka1);
-                oznake.setOznaka(oznaka2);
+                oznake.setGrupa(grupa);
 
 
                 try {
@@ -185,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     private void refresh() {
         listViewMain = findViewById(R.id.list_view_MAIN);

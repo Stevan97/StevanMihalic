@@ -39,9 +39,11 @@ import com.ftninformatika.stevanmihalic.model.NavigationItems;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.ForeignCollection;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
@@ -55,7 +57,7 @@ public class DetailActivity extends AppCompatActivity {
     private Task task = null;
 
     private ForeignCollection<Task> taskForeignCollection = null;
-    private List<Task> filmoviList = null;
+    private List<Task> taskList = null;
     private ListView listViewDetail = null;
     private TaskAdapter taskAdapter = null;
     private Intent intentPosition = null;
@@ -87,6 +89,48 @@ public class DetailActivity extends AppCompatActivity {
 
         navigationDrawer();
 
+
+    }
+
+    private void prikaziDetaljeGrupe() {
+        intentPosition = getIntent();
+        idPosition = intentPosition.getExtras().getInt("id");
+
+        try {
+            grupa = getDatabaseHelper().getGrupa().queryForId(idPosition);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        TextView naziv = findViewById(R.id.detail_naziv_grupe);
+        message1 = new SpannableString("Naziv Grupe: ");
+        message2 = new SpannableString(grupa.getNaziv());
+        spannableStyle();
+        naziv.setText(message1);
+        naziv.append(message2);
+
+        TextView biografija = findViewById(R.id.detail_datum_kreiranja);
+        message1 = new SpannableString("Datum Kreiranja: ");
+        message2 = new SpannableString(grupa.getVremeKreiranjaGrupe());
+        spannableStyle();
+        biografija.setText(message1);
+        biografija.append(message2);
+
+        ListView listView = findViewById(R.id.list_view_tagovi);
+        List<String> tagovi = Collections.singletonList(grupa.getOznake());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tagovi);
+        listView.setAdapter(adapter);
+
+
+        listViewDetail = findViewById(R.id.list_view_DETAIL);
+        try {
+            taskForeignCollection = getDatabaseHelper().getGrupa().queryForId(idPosition).getToDoZadaci();
+            taskList = new ArrayList<>(taskForeignCollection);
+            taskAdapter = new TaskAdapter(this, taskList);
+            listViewDetail.setAdapter(taskAdapter);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -123,7 +167,7 @@ public class DetailActivity extends AppCompatActivity {
             actionBar.show();
         }
 
-        drawerItems.add(new NavigationItems("Glumci", "Prikazuje listu Glumaca", R.drawable.ic_show_all));
+        drawerItems.add(new NavigationItems("Grupe", "Prikazuje listu Grupa", R.drawable.ic_show_all));
         drawerItems.add(new NavigationItems("Podesavanja", "Otvara Podesavanja Aplikacije", R.drawable.ic_settings));
         drawerItems.add(new NavigationItems("Informacije", "Informacije o Aplikaciji", R.drawable.ic_about_app));
 

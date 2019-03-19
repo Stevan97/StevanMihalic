@@ -55,7 +55,7 @@ public class MainAdapter extends BaseAdapter {
         convertView = layoutInflater.inflate(R.layout.main_adapter, null);
 
         TextView naziv = convertView.findViewById(R.id.main_adapter_naziv);
-        message1 = new SpannableString("Naziv Zadatka: ");
+        message1 = new SpannableString("Naziv Grupe: ");
         message2 = new SpannableString(grupaList.get(position).getNaziv());
         spannableStyle();
         naziv.setText(message1);

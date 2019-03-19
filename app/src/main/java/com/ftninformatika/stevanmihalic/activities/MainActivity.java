@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.ftninformatika.stevanmihalic.R;
 import com.ftninformatika.stevanmihalic.adapters.DrawerAdapter;
+import com.ftninformatika.stevanmihalic.adapters.MainAdapter;
 import com.ftninformatika.stevanmihalic.db.DatabaseHelper;
 import com.ftninformatika.stevanmihalic.db.model.Grupa;
 import com.ftninformatika.stevanmihalic.db.model.Task;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listViewMain = null;
     private List<Grupa> grupaList = null;
-    private ArrayAdapter<Grupa> grupaArrayAdapter = null;
+    private MainAdapter mainAdapter = null;
 
     private SharedPreferences sharedPreferences = null;
     private boolean showMessage = false;
@@ -88,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
         listViewMain = findViewById(R.id.list_view_MAIN);
         try {
             grupaList = getDatabaseHelper().getGrupa().queryForAll();
-            grupaArrayAdapter = new ArrayAdapter<>(this, R.layout.list_array_adapter, R.id.list_array_text_view, grupaList);
-            listViewMain.setAdapter(grupaArrayAdapter);
+            mainAdapter = new MainAdapter(this, grupaList);
+            listViewMain.setAdapter(mainAdapter);
             listViewMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -184,13 +185,11 @@ public class MainActivity extends AppCompatActivity {
     private void refresh() {
         listViewMain = findViewById(R.id.list_view_MAIN);
         if (listViewMain != null) {
-            grupaArrayAdapter = (ArrayAdapter<Grupa>) listViewMain.getAdapter();
-            if (grupaArrayAdapter != null) {
+            mainAdapter = (MainAdapter) listViewMain.getAdapter();
+            if (mainAdapter != null) {
                 try {
                     grupaList = getDatabaseHelper().getGrupa().queryForAll();
-                    grupaArrayAdapter.clear();
-                    grupaArrayAdapter.addAll(grupaList);
-                    grupaArrayAdapter.notifyDataSetChanged();
+                    mainAdapter.refreshList(grupaList);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

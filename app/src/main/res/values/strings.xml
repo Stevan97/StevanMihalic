@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Stevan Mihalic</string>
+    <string name="open_drawer">Drawer Opened</string>
+    <string name="close_drawer">Drawer Closed</string>
+    <string name="dialog_about_title">O Aplikaciji</string>
+    <string name="dialog_about_message">Aplikacija O TODOZADACIMA</string>
+    <string name="dialog_about_yes">Confirm</string>
+    <string name="dialog_about_no">Cancel</string>
+    <string name="dodaj_grupu">Dodaj Grupu</string>
 </resources>

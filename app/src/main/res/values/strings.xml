@@ -15,4 +15,10 @@
     <string name="todozadatak">ToDOZADATAK</string>
     <string name="lista_tagova">Lista Tagova:</string>
     <string name="lista_zadataka">Lista Zadataka:</string>
+    <string name="opis_zadatka">Opis ZADATKA</string>
+    <string name="vreme_kreiranja_zadatka">Vreme Kreiranja Zadatka</string>
+    <string name="vreme_zavrsetka_zadatka">Vreme Zavrsetka Zadatka</string>
+    <string name="prioritet">PRIORITET:</string>
+    <string name="status">STATUS:</string>
+    <string name="naziv_zadatka">Naziv Zadatka</string>
 </resources>

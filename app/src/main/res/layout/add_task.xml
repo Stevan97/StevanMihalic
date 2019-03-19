@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/colorDark"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/add_task_naziv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/naziv_zadatka"
+        android:textColorHint="@color/colorRED"
+        android:textColor="@color/colorRED"/>
+
+    <EditText
+        android:id="@+id/add_task_opis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/opis_zadatka"
+        android:textColorHint="@color/colorRED"
+        android:textColor="@color/colorRED"/>
+
+    <EditText
+        android:id="@+id/add_task_vreme_kreiranja"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:hint="@string/vreme_kreiranja_zadatka"
+        android:textColorHint="@color/colorRED"
+        android:textColor="@color/colorRED"/>
+
+    <EditText
+        android:id="@+id/add_task_vreme_zavrsetka"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:hint="@string/vreme_zavrsetka_zadatka"
+        android:textColorHint="@color/colorRED"
+        android:textColor="@color/colorRED"/>
+
+    <TextView
+        android:text="@string/prioritet"
+        android:textColor="@color/colorRED"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id="@+id/add_task_spinner_prioritet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorRED"
+        android:textColor="@color/colorRED"/>
+
+    <TextView
+        android:text="@string/status"
+        android:textColor="@color/colorRED"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id="@+id/add_task_spinner_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorRED"
+        android:textColor="@color/colorRED"/>
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/add_task_button_confirm"
+            android:textSize="20sp"
+            android:text="@string/potvrdi"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/add_task_button_cancel"
+            android:textSize="20sp"
+            android:text="@string/odustani"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

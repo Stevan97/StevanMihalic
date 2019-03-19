@@ -33,6 +33,7 @@ import com.ftninformatika.stevanmihalic.adapters.DrawerAdapter;
 import com.ftninformatika.stevanmihalic.adapters.TaskAdapter;
 import com.ftninformatika.stevanmihalic.db.DatabaseHelper;
 import com.ftninformatika.stevanmihalic.db.model.Grupa;
+import com.ftninformatika.stevanmihalic.db.model.Oznake;
 import com.ftninformatika.stevanmihalic.db.model.Task;
 import com.ftninformatika.stevanmihalic.dialogs.AboutDialog;
 import com.ftninformatika.stevanmihalic.model.NavigationItems;
@@ -63,6 +64,11 @@ public class DetailActivity extends AppCompatActivity {
     private Intent intentPosition = null;
     private int idPosition = 0;
 
+    private ForeignCollection<Oznake> oznakeForeignCollection = null;
+    private List<Oznake> oznakeList = null;
+    private ArrayAdapter<Oznake> arrayAdapterOznake = null;
+
+
     private Spannable message1 = null;
     private Spannable message2 = null;
     private Spannable message3 = null;
@@ -88,6 +94,8 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         navigationDrawer();
+
+        prikaziDetaljeGrupe();
 
 
     }
@@ -117,9 +125,14 @@ public class DetailActivity extends AppCompatActivity {
         biografija.append(message2);
 
         ListView listView = findViewById(R.id.list_view_tagovi);
-        List<String> tagovi = Collections.singletonList(grupa.getOznake());
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tagovi);
-        listView.setAdapter(adapter);
+        try {
+            oznakeForeignCollection = getDatabaseHelper().getGrupa().queryForId(idPosition).getOznake();
+            oznakeList = new ArrayList<>(oznakeForeignCollection);
+            arrayAdapterOznake = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, oznakeList);
+            listView.setAdapter(taskAdapter);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 
         listViewDetail = findViewById(R.id.list_view_DETAIL);

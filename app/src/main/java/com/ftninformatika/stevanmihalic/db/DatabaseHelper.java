@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.ftninformatika.stevanmihalic.db.model.Grupa;
+import com.ftninformatika.stevanmihalic.db.model.Oznake;
 import com.ftninformatika.stevanmihalic.db.model.Task;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -24,12 +25,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private Dao<Grupa, Integer> getmGrupa = null;
     private Dao<Task, Integer> getmToDoZadatak = null;
+    private Dao<Oznake, Integer> getMOznake = null;
 
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource, Grupa.class);
             TableUtils.createTable(connectionSource, Task.class);
+            TableUtils.createTable(connectionSource, Oznake.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,6 +41,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
+            TableUtils.dropTable(connectionSource, Oznake.class,true);
             TableUtils.dropTable(connectionSource, Task.class, true);
             TableUtils.dropTable(connectionSource, Grupa.class, true);
             onCreate(database, connectionSource);
@@ -60,10 +64,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return getmToDoZadatak;
     }
 
+    public Dao<Oznake, Integer> getOznaka() throws SQLException {
+        if (getMOznake == null) {
+            getMOznake = getDao(Oznake.class);
+        }
+        return getMOznake;
+    }
+
     @Override
     public void close() {
         getmToDoZadatak = null;
         getmGrupa = null;
+        getMOznake = null;
         super.close();
     }
 }

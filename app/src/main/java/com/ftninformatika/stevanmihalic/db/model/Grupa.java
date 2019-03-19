@@ -26,8 +26,8 @@ public class Grupa {
     @DatabaseField(columnName = FIELD_VREME_KREIRANJA)
     private String vremeKreiranjaGrupe;
 
-    @DatabaseField(columnName = FIELD_LISTA_OZNAKA)
-    private String oznake;
+    @ForeignCollectionField(columnName = FIELD_LISTA_OZNAKA,eager = true)
+    private ForeignCollection<Oznake> oznake;
 
     @ForeignCollectionField(columnName = FIELD_toDOZADACI, eager = true)
     private ForeignCollection<Task> toDoZadaci;
@@ -60,11 +60,11 @@ public class Grupa {
         this.vremeKreiranjaGrupe = vremeKreiranjaGrupe;
     }
 
-    public String getOznake() {
+    public ForeignCollection<Oznake> getOznake() {
         return oznake;
     }
 
-    public void setOznake(String oznake) {
+    public void setOznake(ForeignCollection<Oznake> oznake) {
         this.oznake = oznake;
     }
 

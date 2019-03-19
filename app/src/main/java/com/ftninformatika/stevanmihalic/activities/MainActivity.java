@@ -34,6 +34,7 @@ import com.ftninformatika.stevanmihalic.adapters.DrawerAdapter;
 import com.ftninformatika.stevanmihalic.adapters.MainAdapter;
 import com.ftninformatika.stevanmihalic.db.DatabaseHelper;
 import com.ftninformatika.stevanmihalic.db.model.Grupa;
+import com.ftninformatika.stevanmihalic.db.model.Oznake;
 import com.ftninformatika.stevanmihalic.db.model.Task;
 import com.ftninformatika.stevanmihalic.dialogs.AboutDialog;
 import com.ftninformatika.stevanmihalic.model.NavigationItems;
@@ -139,12 +140,15 @@ public class MainActivity extends AppCompatActivity {
                 grupa = new Grupa();
                 grupa.setNaziv(naziv);
                 grupa.setVremeKreiranjaGrupe(vremeKreiranja);
-                grupa.setOznake(oznaka1);
-                grupa.setOznake(oznaka2);
+
+                Oznake oznake = new Oznake();
+                oznake.setOznaka(oznaka1);
+                oznake.setOznaka(oznaka2);
 
 
                 try {
                     getDatabaseHelper().getGrupa().create(grupa);
+                    getDatabaseHelper().getOznaka().create(oznake);
                     refresh();
                     dialog.dismiss();
 
